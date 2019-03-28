@@ -39,7 +39,7 @@ class HomeScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>AATHIURI HOME!</Text>
+        <Text>AATHIURI HOME shifran!</Text>
       </View>
     );
   }
