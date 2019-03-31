@@ -7,12 +7,16 @@ import PhoneAuth from './screens/PhoneAuth';
 import RegisterScreen from './screens/RegisterScreen';
 import RestaurantScreen from './screens/RestaurantScreen';
 import SearchScreen from './screens/SearchScreen';
-
+import {Icon } from 'react-native-elements';
 
 const TabNavigator = createBottomTabNavigator({
-  Restaurant: RestaurantScreen,
-  Search: SearchScreen,
-});
+  Restaurant: {
+    screen: RestaurantScreen,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => <Icon name="access-alarms" color={tintColor} />
+    } },
+  Search: SearchScreen
+}  );
 
 
 const LoginNavigator = createStackNavigator({

@@ -1,7 +1,6 @@
 import React from 'react';
-import { Button, View, Text } from 'react-native';
-
-
+import {  View, Text } from 'react-native';
+import { Button ,Icon } from 'react-native-elements';
 
 
 class WelcomeScreen extends React.Component {
@@ -10,9 +9,22 @@ class WelcomeScreen extends React.Component {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <Text>Welcome to Treat</Text>
-        <Button title="Go to Login"
+        <Button
+        icon={
+          <Icon
+        name='arrow-right'
+        type='evilicon'
+        color='#517fa4'
+       />
+
+        }
+
+          title="Go to Login"
+         type="outline"
           onPress={() => this.props.navigation.navigate('Login')}
         />
+
+
       </View>
     );
   }
