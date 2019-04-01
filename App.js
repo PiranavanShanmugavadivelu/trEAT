@@ -8,14 +8,26 @@ import RegisterScreen from './screens/RegisterScreen';
 import RestaurantScreen from './screens/RestaurantScreen';
 import SearchScreen from './screens/SearchScreen';
 import {Icon } from 'react-native-elements';
+import FoodScreen from './screens/FoodScreen';
+import OrderScreen from './screens/OrderScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
 const TabNavigator = createBottomTabNavigator({
   Restaurant: {
     screen: RestaurantScreen,
     navigationOptions: {
-      tabBarIcon: ({ tintColor }) => <Icon name="access-alarms" color={tintColor} />
+      tabBarIcon: ({ tintColor }) => <Icon name="shop" color={tintColor} />
     } },
-  Search: SearchScreen
+  Search: {
+    screen: SearchScreen,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => <Icon name="search" color={tintColor} />
+    } },
+  Settings:{
+    screen: SettingsScreen,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => <Icon name="settings" color={tintColor} />
+    }}
 }  );
 
 
@@ -23,8 +35,9 @@ const LoginNavigator = createStackNavigator({
  LoginPage:Login,
  Register:PhoneAuth,
  RegisterForm:RegisterScreen,
- App:TabNavigator
-
+ App:TabNavigator,
+ Food:FoodScreen,
+ Order:OrderScreen
 }, {
     initialRouteName: 'LoginPage',
 });

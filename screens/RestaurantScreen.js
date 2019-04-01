@@ -104,15 +104,15 @@ export default class RestaurantScreen extends Component {
     super(props);
     this.state = {
       data: [
-        {id:1, title: "Lorem ipsum dolor",                  time:"1 days a go",    image:"https://lorempixel.com/400/200/nature/6/"},
-        {id:2, title: "Sit amet, consectetuer",             time:"2 minutes a go", image:"https://lorempixel.com/400/200/nature/5/"} ,
-        {id:3, title: "Dipiscing elit. Aenean ",            time:"3 hour a go",    image:"https://lorempixel.com/400/200/nature/4/"},
-        {id:4, title: "Commodo ligula eget dolor.",         time:"4 months a go",  image:"https://lorempixel.com/400/200/nature/6/"},
-        {id:5, title: "Aenean massa. Cum sociis",           time:"5 weeks a go",   image:"https://lorempixel.com/400/200/sports/1/"},
-        {id:6, title: "Natoque penatibus et magnis",        time:"6 year a go",    image:"https://lorempixel.com/400/200/nature/8/"},
-        {id:7, title: "Dis parturient montes, nascetur",    time:"7 minutes a go", image:"https://lorempixel.com/400/200/nature/1/"},
-        {id:8, title: "Ridiculus mus. Donec quam",          time:"8 days a go",    image:"https://lorempixel.com/400/200/nature/3/"},
-        {id:9, title: "Felis, ultricies nec, pellentesque", time:"9 minutes a go", image:"https://lorempixel.com/400/200/nature/4/"},
+        {id:1, title: "Restaurant 1",                  time:"1 days a go",    image:"https://www.google.com/search?q=restaurants&hl=en&tbm=isch&tbs=rimg:CYfzBZj2F_1hfImCxO9vGDPwNkxAGZXdIbvMDXj01RT_1TUQhgOmOP36Sl87SVSLKcA4QUlT5JsdsOzGRnU2r7L1PQr9VNygxsItfoQyUJxKENIx6zLiVemi29GJwti7KI85ZEKmV20qZP2_1gqEgmxO9vGDPwNkxENvcaekFg9ESoSCRAGZXdIbvMDEfPm57_1owSxrKhIJXj01RT_1TUQgR1yGusc5fiPMqEglgOmOP36Sl8xEzYUeWycZ1FCoSCbSVSLKcA4QUEV1mwk2OxzfTKhIJlT5JsdsOzGQRdkhqeNNH19sqEglnU2r7L1PQrxGyRiWiC3ZpCCoSCdVNygxsItfoEcHjhMSyTXatKhIJQyUJxKENIx4RPxgSfB-vbfQqEgmzLiVemi29GBE4vkUTB88RcCoSCZwti7KI85ZEEesy_151U4xEXKhIJKmV20qZP2_1gR8DArVEKBGUQ&tbo=u&sa=X&ved=2ahUKEwiIgdy1jK7hAhVHeH0KHUbmDbMQrnZ6BAgBEBY&biw=1536&bih=722&dpr=1.25#imgrc=r8DyeeqDo6AVmM:"},
+        {id:2, title: "Restaurant 2",             time:"2 minutes a go", image:"https://lorempixel.com/400/200/nature/5/"} ,
+        {id:3, title:  "Restaurant 3",            time:"3 hour a go",    image:"https://lorempixel.com/400/200/nature/4/"},
+        {id:4, title:  "Restaurant 4",         time:"4 months a go",  image:"https://lorempixel.com/400/200/nature/6/"},
+        {id:5, title:  "Restaurant 5",           time:"5 weeks a go",   image:"https://lorempixel.com/400/200/sports/1/"},
+        {id:6, title:  "Restaurant 6",        time:"6 year a go",    image:"https://lorempixel.com/400/200/nature/8/"},
+        {id:7, title:  "Restaurant 7",    time:"7 minutes a go", image:"https://lorempixel.com/400/200/nature/1/"},
+        {id:8, title:  "Restaurant 8",          time:"8 days a go",    image:"https://lorempixel.com/400/200/nature/3/"},
+        {id:9, title:  "Restaurant 9", time:"9 minutes a go", image:"https://lorempixel.com/400/200/nature/4/"},
       ]
     };
   }
@@ -120,7 +120,7 @@ export default class RestaurantScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <FlatList style={styles.list}
+        <FlatList  List style={styles.list}
           data={this.state.data}
           keyExtractor= {(item) => {
             return item.id;
@@ -134,6 +134,8 @@ export default class RestaurantScreen extends Component {
             const item = post.item;
             return (
               <View style={styles.card}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Food')}>
+
 
                <View style={styles.cardHeader}>
                   <View>
@@ -143,7 +145,7 @@ export default class RestaurantScreen extends Component {
                 </View>
 
                 <Image style={styles.cardImage} source={{uri:item.image}}/>
-
+                </TouchableOpacity>
                 <View style={styles.cardFooter}>
                   <View style={styles.socialBarContainer}>
                     <View style={styles.socialBarSection}>
