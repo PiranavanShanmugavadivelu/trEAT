@@ -16,7 +16,7 @@ const TabNavigator = createBottomTabNavigator({
   Restaurant: {
     screen: RestaurantScreen,
     navigationOptions: {
-      tabBarIcon: ({ tintColor }) => <Icon name="shop" color={tintColor} />
+      tabBarIcon: ({ tintColor }) => <Icon name="room-service" color={tintColor} />
     } },
   Search: {
     screen: SearchScreen,

@@ -1,7 +1,8 @@
 // import React from 'react';
 // import firebase from 'react-native-firebase';
-// import { ScrollView, View, Text, TextInput, Button,FlatList } from 'react-native';
+// import { ScrollView, View, Text, TextInput, Button,FlatList,ListView } from 'react-native';
 // import Todo from './Todo';
+// import { ListItem } from 'react-native-elements';
 
 
 // export default class RestaurantScreen extends React.Component {
@@ -11,7 +12,6 @@
 //     this.ref = firebase.firestore().collection('todos');
 //     this.unsubscribe = null;
 //     this.state = {
-//         textInput: '',
 //         loading: true,
 //         todos: [],
 //     };
@@ -23,10 +23,6 @@
 
 // componentWillUnmount() {
 //   this.unsubscribe();
-// }
-
-// updateTextInput(value) {
-//   this.setState({ textInput: value });
 // }
 
 // onCollectionUpdate = (querySnapshot) => {
@@ -46,15 +42,7 @@
 //  });
 // }
 
-// addTodo() {
-//   this.ref.add({
-//     title: this.state.textInput,
-//     complete: false,
-//   });
-//   this.setState({
-//     textInput: '',
-//   });
-// }
+
 
 // render() {
 //   if (this.state.loading) {
@@ -62,19 +50,9 @@
 //   }
 //   return (
 //     <View style={{ flex: 1 }}>
-//         <FlatList
+//         <ListView
 //           data={this.state.todos}
 //           renderItem={({ item }) => <Todo {...item} />}
-//         />
-//         <TextInput
-//             placeholder={'Add TODO'}
-//             value={this.state.textInput}
-//             onChangeText={(text) => this.updateTextInput(text)}
-//         />
-//         <Button
-//             title={'Add TODO'}
-//             disabled={!this.state.textInput.length}
-//             onPress={() => this.addTodo()}
 //         />
 //     </View>
 //   );
@@ -83,7 +61,6 @@
 
 // }
 
-// ``
 
 import React, { Component } from 'react';
 import {
@@ -97,33 +74,58 @@ import {
   FlatList,
   Button
 } from 'react-native';
+import firebase from 'react-native-firebase';
+import Todo from './Todo';
 
 export default class RestaurantScreen extends Component {
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
+    this.ref = firebase.firestore().collection('Restaurant');
+    this.unsubscribe = null;
     this.state = {
-      data: [
-        {id:1, title: "Restaurant 1",                  time:"1 days a go",    image:"https://www.google.com/search?q=restaurants&hl=en&tbm=isch&tbs=rimg:CYfzBZj2F_1hfImCxO9vGDPwNkxAGZXdIbvMDXj01RT_1TUQhgOmOP36Sl87SVSLKcA4QUlT5JsdsOzGRnU2r7L1PQr9VNygxsItfoQyUJxKENIx6zLiVemi29GJwti7KI85ZEKmV20qZP2_1gqEgmxO9vGDPwNkxENvcaekFg9ESoSCRAGZXdIbvMDEfPm57_1owSxrKhIJXj01RT_1TUQgR1yGusc5fiPMqEglgOmOP36Sl8xEzYUeWycZ1FCoSCbSVSLKcA4QUEV1mwk2OxzfTKhIJlT5JsdsOzGQRdkhqeNNH19sqEglnU2r7L1PQrxGyRiWiC3ZpCCoSCdVNygxsItfoEcHjhMSyTXatKhIJQyUJxKENIx4RPxgSfB-vbfQqEgmzLiVemi29GBE4vkUTB88RcCoSCZwti7KI85ZEEesy_151U4xEXKhIJKmV20qZP2_1gR8DArVEKBGUQ&tbo=u&sa=X&ved=2ahUKEwiIgdy1jK7hAhVHeH0KHUbmDbMQrnZ6BAgBEBY&biw=1536&bih=722&dpr=1.25#imgrc=r8DyeeqDo6AVmM:"},
-        {id:2, title: "Restaurant 2",             time:"2 minutes a go", image:"https://lorempixel.com/400/200/nature/5/"} ,
-        {id:3, title:  "Restaurant 3",            time:"3 hour a go",    image:"https://lorempixel.com/400/200/nature/4/"},
-        {id:4, title:  "Restaurant 4",         time:"4 months a go",  image:"https://lorempixel.com/400/200/nature/6/"},
-        {id:5, title:  "Restaurant 5",           time:"5 weeks a go",   image:"https://lorempixel.com/400/200/sports/1/"},
-        {id:6, title:  "Restaurant 6",        time:"6 year a go",    image:"https://lorempixel.com/400/200/nature/8/"},
-        {id:7, title:  "Restaurant 7",    time:"7 minutes a go", image:"https://lorempixel.com/400/200/nature/1/"},
-        {id:8, title:  "Restaurant 8",          time:"8 days a go",    image:"https://lorempixel.com/400/200/nature/3/"},
-        {id:9, title:  "Restaurant 9", time:"9 minutes a go", image:"https://lorempixel.com/400/200/nature/4/"},
-      ]
+        loading: true,
+        todos: [],
     };
-  }
+}
+
+componentDidMount() {
+  this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate)
+}
+
+componentWillUnmount() {
+  this.unsubscribe();
+}
+
+onCollectionUpdate = (querySnapshot) => {
+  const todos = [];
+  querySnapshot.forEach((doc) => {
+    const { Name, Place,Rating } = doc.data();
+    todos.push({
+      key: doc.id,
+      doc, // DocumentSnapshot
+      Name,
+      Place,
+      Rating
+    });
+  });
+  this.setState({
+    todos,
+    loading: false,
+ });
+}
 
   render() {
+    if (this.state.loading) {
+      return null; // or render a loading icon
+    }
     return (
       <View style={styles.container}>
         <FlatList  List style={styles.list}
-          data={this.state.data}
+          data={this.state.todos}
+          renderItem={({ item }) => <Todo {...item} />}
           keyExtractor= {(item) => {
-            return item.id;
+            return item.Name,item.Place;
           }}
           ItemSeparatorComponent={() => {
             return (
@@ -139,19 +141,19 @@ export default class RestaurantScreen extends Component {
 
                <View style={styles.cardHeader}>
                   <View>
-                    <Text style={styles.title}>{item.title}</Text>
-                    <Text style={styles.time}>{item.time}</Text>
+                    <Text style={styles.title}>{item.Name}</Text>
+                    <Text style={styles.time}>{item.Place}</Text>
                   </View>
                 </View>
 
-                <Image style={styles.cardImage} source={{uri:item.image}}/>
+                <Image style={styles.cardImage} source={{uri:'https://lorempixel.com/400/200/nature/4/'}}/>
                 </TouchableOpacity>
                 <View style={styles.cardFooter}>
                   <View style={styles.socialBarContainer}>
                     <View style={styles.socialBarSection}>
                       <TouchableOpacity style={styles.socialBarButton}>
                         <Image style={styles.icon} source={{uri: 'https://png.icons8.com/android/75/e74c3c/hearts.png'}}/>
-                        <Text style={styles.socialBarLabel}>78</Text>
+                        <Text style={styles.socialBarLabel}>{item.Rating}</Text>
                       </TouchableOpacity>
                     </View>
                     <View style={styles.socialBarSection}>
