@@ -1,66 +1,3 @@
-// import React from 'react';
-// import firebase from 'react-native-firebase';
-// import { ScrollView, View, Text, TextInput, Button,FlatList,ListView } from 'react-native';
-// import Todo from './Todo';
-// import { ListItem } from 'react-native-elements';
-
-
-// export default class RestaurantScreen extends React.Component {
-
-//   constructor() {
-//     super();
-//     this.ref = firebase.firestore().collection('todos');
-//     this.unsubscribe = null;
-//     this.state = {
-//         loading: true,
-//         todos: [],
-//     };
-// }
-
-// componentDidMount() {
-//   this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate)
-// }
-
-// componentWillUnmount() {
-//   this.unsubscribe();
-// }
-
-// onCollectionUpdate = (querySnapshot) => {
-//   const todos = [];
-//   querySnapshot.forEach((doc) => {
-//     const { title, complete } = doc.data();
-//     todos.push({
-//       key: doc.id,
-//       doc, // DocumentSnapshot
-//       title,
-//       complete,
-//     });
-//   });
-//   this.setState({
-//     todos,
-//     loading: false,
-//  });
-// }
-
-
-
-// render() {
-//   if (this.state.loading) {
-//     return null; // or render a loading icon
-//   }
-//   return (
-//     <View style={{ flex: 1 }}>
-//         <ListView
-//           data={this.state.todos}
-//           renderItem={({ item }) => <Todo {...item} />}
-//         />
-//     </View>
-//   );
-// }
-
-
-// }
-
 
 import React, { Component } from 'react';
 import {
@@ -75,9 +12,24 @@ import {
   Button
 } from 'react-native';
 import firebase from 'react-native-firebase';
-import Todo from './Todo';
+import {Icon} from  'react-native-elements';
+
 
 export default class RestaurantScreen extends Component {
+  static navigationOptions = {
+    title: 'Home',
+  };
+
+  static navigationOptions = {
+    title: 'Home',
+    headerStyle: {
+      backgroundColor: '#f4511e',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  };
 
   constructor() {
     super();
@@ -85,7 +37,7 @@ export default class RestaurantScreen extends Component {
     this.unsubscribe = null;
     this.state = {
         loading: true,
-        todos: [],
+        Restaurant: [],
     };
 }
 
@@ -98,19 +50,20 @@ componentWillUnmount() {
 }
 
 onCollectionUpdate = (querySnapshot) => {
-  const todos = [];
+  const Restaurant = [];
   querySnapshot.forEach((doc) => {
-    const { Name, Place,Rating } = doc.data();
-    todos.push({
+    const { Name, Place,Rating,Url} = doc.data();
+    Restaurant.push({
       key: doc.id,
       doc, // DocumentSnapshot
       Name,
       Place,
-      Rating
+      Rating,
+      Url
     });
   });
   this.setState({
-    todos,
+    Restaurant,
     loading: false,
  });
 }
@@ -120,10 +73,9 @@ onCollectionUpdate = (querySnapshot) => {
       return null; // or render a loading icon
     }
     return (
-      <View style={styles.container}>
+      <View >
         <FlatList  List style={styles.list}
-          data={this.state.todos}
-          renderItem={({ item }) => <Todo {...item} />}
+          data={this.state.Restaurant}
           keyExtractor= {(item) => {
             return item.Name,item.Place;
           }}
@@ -136,7 +88,10 @@ onCollectionUpdate = (querySnapshot) => {
             const item = post.item;
             return (
               <View style={styles.card}>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Food')}>
+              <TouchableOpacity onPress={() => {
+            /* 1. Navigate to the Details route with params */
+              this.props.navigation.navigate('Food');
+          }} >
 
 
                <View style={styles.cardHeader}>
@@ -146,25 +101,25 @@ onCollectionUpdate = (querySnapshot) => {
                   </View>
                 </View>
 
-                <Image style={styles.cardImage} source={{uri:'https://lorempixel.com/400/200/nature/4/'}}/>
+                <Image style={styles.cardImage} source={{uri:item.Url}}/>
                 </TouchableOpacity>
                 <View style={styles.cardFooter}>
                   <View style={styles.socialBarContainer}>
                     <View style={styles.socialBarSection}>
                       <TouchableOpacity style={styles.socialBarButton}>
-                        <Image style={styles.icon} source={{uri: 'https://png.icons8.com/android/75/e74c3c/hearts.png'}}/>
+                       <Icon name="thumb-up" color='#d11717'/>
                         <Text style={styles.socialBarLabel}>{item.Rating}</Text>
                       </TouchableOpacity>
                     </View>
                     <View style={styles.socialBarSection}>
                       <TouchableOpacity style={styles.socialBarButton}>
-                        <Image style={styles.icon} source={{uri: 'https://png.icons8.com/ios-glyphs/75/2ecc71/comments.png'}}/>
+                      <Icon name="insert-comment" color='#d11717'/>
                         <Text style={styles.socialBarLabel}>25</Text>
                       </TouchableOpacity>
                     </View>
                     <View style={styles.socialBarSection}>
                       <TouchableOpacity style={styles.socialBarButton}>
-                        <Image style={styles.icon} source={{uri: 'https://png.icons8.com/metro/75/3498db/administrator-male.png'}}/>
+                      <Icon name="star" color='#d11717'/>
                         <Text rkType='primary4 hintColor' style={styles.socialBarLabel}>13</Text>
                       </TouchableOpacity>
                     </View>
@@ -182,22 +137,23 @@ const styles = StyleSheet.create({
   container:{
     flex:1,
     marginTop:20,
+
   },
   list: {
     paddingHorizontal: 17,
-    backgroundColor:"#E6E6E6",
+    backgroundColor:"#e2e0e0",
   },
   separator: {
     marginTop: 10,
   },
   /******** card **************/
   card:{
-    shadowColor: '#00000021',
-    shadowOffset: {
-      width: 2
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
+    shadowColor: '#870909',
+    borderRadius:5,
+    shadowOffset:{  width: 10,  height: 10,  },
+    shadowColor: 'black',
+    shadowOpacity: 10,
+    shadowRadius: 8,
     marginVertical: 8,
     backgroundColor:"white"
   },
@@ -226,15 +182,22 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 150,
     width: null,
+    borderRadius:10,
+    marginLeft:8,
+    marginRight:8,
+
+
   },
   /******** card components **************/
   title:{
     fontSize:18,
     flex:1,
+    color:'black',
+    fontWeight: 'bold'
   },
   time:{
     fontSize:13,
-    color: "#808080",
+    color: "black",
     marginTop: 5
   },
   icon: {

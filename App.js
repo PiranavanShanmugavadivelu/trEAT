@@ -16,17 +16,17 @@ const TabNavigator = createBottomTabNavigator({
   Restaurant: {
     screen: RestaurantScreen,
     navigationOptions: {
-      tabBarIcon: ({ tintColor }) => <Icon name="room-service" color={tintColor} />
+      tabBarIcon: ({ black }) => <Icon name="room-service" color={black} />
     } },
   Search: {
     screen: SearchScreen,
     navigationOptions: {
-      tabBarIcon: ({ tintColor }) => <Icon name="search" color={tintColor} />
+      tabBarIcon: ({ black }) => <Icon name="search" color={black} />
     } },
   Settings:{
     screen: SettingsScreen,
     navigationOptions: {
-      tabBarIcon: ({ tintColor }) => <Icon name="settings" color={tintColor} />
+      tabBarIcon: ({ black }) => <Icon name="settings" color={black} />
     }}
 }  );
 
@@ -35,17 +35,37 @@ const LoginNavigator = createStackNavigator({
  LoginPage:Login,
  Register:PhoneAuth,
  RegisterForm:RegisterScreen,
- App:TabNavigator,
- Food:FoodScreen,
- Order:OrderScreen
 }, {
     initialRouteName: 'LoginPage',
+
 });
+
+const HomeNavigator = createStackNavigator({
+  Tab:{
+    screen:TabNavigator,
+    navigationOptions: { title: 'Restaurant' }
+  },
+  Food:FoodScreen,
+  Order:OrderScreen
+ }, {
+     initialRouteName: 'Tab',
+     defaultNavigationOptions: {
+      // headerStyle: {
+      //   backgroundColor: '#f4511e',
+      // },
+      // headerTintColor: '#fff',
+      // headerTitleStyle: {
+      //   fontWeight: 'bold',
+      // },
+    },
+
+ });
 
 const Navigator = createSwitchNavigator(
   {
   Welcome: WelcomeScreen,
   Login: LoginNavigator,
+  Home:HomeNavigator,
   },
   {
     initialRouteName: 'Welcome',
