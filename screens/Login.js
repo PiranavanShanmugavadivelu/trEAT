@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import firebase from 'react-native-firebase';
 import {
   StyleSheet,
   Text,
@@ -9,6 +10,7 @@ import {
   Image,
   Alert
 } from 'react-native';
+import firebaseService from '../server/logincontroller.js'
 
 export default class Login extends Component {
 
@@ -19,6 +21,11 @@ export default class Login extends Component {
       password: '',
     }
   }
+  async load(id) {
+      const doc = await this.ref.doc(id).get()
+      if (doc.exists) {
+        this.props.navigation.navigate('App')}}
+
 
   onClickListener = (viewId) => {
     Alert.alert("Alert", "Button pressed "+viewId);
@@ -30,8 +37,8 @@ export default class Login extends Component {
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/message/ultraviolet/50/3498db'}}/>
           <TextInput style={styles.inputs}
-              placeholder="Email"
-              keyboardType="email-address"
+              placeholder="username"
+              keyboardType='numeric'
               underlineColorAndroid='transparent'
               onChangeText={(email) => this.setState({email})}/>
         </View>
@@ -45,7 +52,7 @@ export default class Login extends Component {
               onChangeText={(password) => this.setState({password})}/>
         </View>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('App')}>
+        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.load(this.state.email)}>
           <Text style={styles.loginText}>Login</Text>
         </TouchableHighlight>
 
