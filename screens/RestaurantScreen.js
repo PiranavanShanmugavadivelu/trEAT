@@ -16,20 +16,20 @@ import {Icon} from  'react-native-elements';
 
 
 export default class RestaurantScreen extends Component {
-  static navigationOptions = {
-    title: 'Home',
-  };
+  // static navigationOptions = {
+  //   title: 'Home',
+  // };
 
-  static navigationOptions = {
-    title: 'Home',
-    headerStyle: {
-      backgroundColor: '#f4511e',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  };
+  // static navigationOptions = {
+  //   title: 'Home',
+  //   headerStyle: {
+  //     backgroundColor: '#f4511e',
+  //   },
+  //   headerTintColor: '#fff',
+  //   headerTitleStyle: {
+  //     fontWeight: 'bold',
+  //   },
+  // };
 
   constructor() {
     super();
