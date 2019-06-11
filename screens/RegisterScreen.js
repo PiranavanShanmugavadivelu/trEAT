@@ -9,20 +9,75 @@ import {
   Image,
   Alert
 } from 'react-native';
+import Firebase from 'react-native-firebase';
+
++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default class SignUpView extends Component {
 
   constructor(props) {
+
     super(props);
+    this.ref = firebase.firestore().collection('login');
     state = {
       fullName: '',
       email   : '',
       password: '',
-    }
+    };
+    this.onSignUp = this.onSignUp.bind(this);
   }
+  saveDetail() {
 
+    this.ref.add({
+      fullname: this.state.fullname,
+      Email: this.state.email,
+      password: this.state.password,
+    }).then((docRef) => {
+      this.setState({
+        fullName: '',
+        email   : '',
+        password: '',
+      });
+
+    })
+    .catch((error) => {
+      console.error("Error adding document: ", error);
+      this.setState({
+        fullName: '',
+        email   : '',
+        password: '',
+      });
+    });
+  }
   onClickListener = (viewId) => {
     Alert.alert("Alert", "Button pressed "+viewId);
+  }
+
+  onSignUp = ()=>{
+   this.saveDetail();
+    this.props.navigation.navigate('App');
   }
 
   render() {
@@ -34,7 +89,7 @@ export default class SignUpView extends Component {
               placeholder="Full name"
               keyboardType="email-address"
               underlineColorAndroid='transparent'
-              onChangeText={(fullName) => this.setState({fullName})}/>
+              onChangeText={(fullName) => this.setState({fullName:fullName})}/>
         </View>
 
         <View style={styles.inputContainer}>
@@ -43,7 +98,7 @@ export default class SignUpView extends Component {
               placeholder="Email"
               keyboardType="email-address"
               underlineColorAndroid='transparent'
-              onChangeText={(email) => this.setState({email})}/>
+              onChangeText={(email) => this.setState({email:email})}/>
         </View>
 
         <View style={styles.inputContainer}>
@@ -52,10 +107,10 @@ export default class SignUpView extends Component {
               placeholder="Password"
               secureTextEntry={true}
               underlineColorAndroid='transparent'
-              onChangeText={(password) => this.setState({password})}/>
+              onChangeText={(password) => this.setState({password:password})}/>
         </View>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.props.navigation.navigate('App')}>
+        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.onSignUp()}>
           <Text style={styles.signUpText}>Sign up</Text>
         </TouchableHighlight>
       </View>

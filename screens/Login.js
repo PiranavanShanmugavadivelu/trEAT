@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import firebase from 'react-native-firebase';
+import Firebase from 'react-native-firebase';
+
 import {
   StyleSheet,
   Text,
@@ -20,11 +21,36 @@ export default class Login extends Component {
       email   : '',
       password: '',
     }
+    this.handleChange = this.handleChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
-  async load(id) {
-      const doc = await this.ref.doc(id).get()
-      if (doc.exists) {
-        this.props.navigation.navigate('App')}}
+
+
+
+  handleChange(e) {
+      this.setState({
+        email: e.nativeEvent.text
+      });
+    }
+    sear(id) {
+        Alert.alert(id);
+
+      const db = Firebase.database();
+
+      db.ref('/login').push({
+        username: id
+
+      });
+      this.props.navigation.navigate('register');
+
+
+   }
+
+  onSubmit(){
+    
+    Alert.alert(this.state.email);
+    this.sear(this.state.email);
+  }
 
 
   onClickListener = (viewId) => {
@@ -40,7 +66,7 @@ export default class Login extends Component {
               placeholder="username"
               keyboardType='numeric'
               underlineColorAndroid='transparent'
-              onChangeText={(email) => this.setState({email})}/>
+              onChangeText={(email) => this.setState({email:email})}/>
         </View>
 
         <View style={styles.inputContainer}>
@@ -49,10 +75,10 @@ export default class Login extends Component {
               placeholder="Password"
               secureTextEntry={true}
               underlineColorAndroid='transparent'
-              onChangeText={(password) => this.setState({password})}/>
+              onChangeText={(password) => this.setState({password:password})}/>
         </View>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.load(this.state.email)}>
+        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.onSubmit()}>
           <Text style={styles.loginText}>Login</Text>
         </TouchableHighlight>
 

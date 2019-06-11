@@ -1,18 +1,18 @@
-import firebase from 'react-native-firebase';
+import Firebase from 'react-native-firebase';
 import { Alert, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 class FirebaseService {
   constructor() {
-    this.ref = firebase.firestore().collection('login')
+    this.ref = Firebase.firestore().collection('login');
   }
-async load(id) {
-    const doc = await this.ref.doc(id).get()
-    if (doc.exists) {
-       this.props.navigation.navigate('App')}
+     sear(id) {
+       console.log(id);
+       this.ref('/login').push({
+         username: id
 
-     else {
-      Alert.alert('username and password doesn\'t match')
-      }
+       });
+       this.props.navigation.navigate('register');
+
 
     }
   }
