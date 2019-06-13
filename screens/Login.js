@@ -20,6 +20,7 @@ export default class Login extends Component {
     state = {
       email   : '',
       password: '',
+      decode:'',
     }
     this.handleChange = this.handleChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -32,23 +33,38 @@ export default class Login extends Component {
         email: e.nativeEvent.text
       });
     }
-    sear(id) {
+
+  decryp(chiperText){
+      var decipherText = simpleCrypto.decrypt(chiperText);
+      Alert.alert("decipherText   : " + decipherText);
+
+    }
+  sear(id) {
         Alert.alert(id);
+        const ref = Firebase.firestore().collection('login').where("Email", "==", id);
+        ref.get().then((doc) => {
+        if(doc.exists){
+         const board = doc.data();
+         this.state.decode=this.decryp(board.Password);
+          if(this.state.password==this.state.decode){
+              this.props.navigation.navigate('Home');
+               }
+          else{
+            Alert.alert("username and password doesn't match");
+          }
+        }
+      else{
+        Alert.alert("no such user");
+      }
 
-      const db = Firebase.database();
 
-      db.ref('/login').push({
-        username: id
+  });
+}
 
-      });
-      this.props.navigation.navigate('register');
-
-
-   }
 
   onSubmit(){
+
     
-    Alert.alert(this.state.email);
     this.sear(this.state.email);
   }
 
@@ -63,7 +79,7 @@ export default class Login extends Component {
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/message/ultraviolet/50/3498db'}}/>
           <TextInput style={styles.inputs}
-              placeholder="username"
+              placeholder="e-mail"
               keyboardType='numeric'
               underlineColorAndroid='transparent'
               onChangeText={(email) => this.setState({email:email})}/>
@@ -86,7 +102,7 @@ export default class Login extends Component {
             <Text>Forgot your password?</Text>
         </TouchableHighlight>
 
-        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.props.navigation.navigate('Register')}>
+        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.props.navigation.navigate('RegisterForm')}>
             <Text>Register</Text>
         </TouchableHighlight>
       </View>

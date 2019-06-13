@@ -10,74 +10,70 @@ import {
   Alert
 } from 'react-native';
 import Firebase from 'react-native-firebase';
+import SimpleCrypto from "simple-crypto-js";
 
-+
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export default class SignUpView extends Component {
-
+export default class RegisterScreen extends Component {
+     _isMounted = false;
   constructor(props) {
 
     super(props);
-    this.ref = firebase.firestore().collection('login');
+    this.ref = Firebase.firestore().collection('login');
     state = {
       fullName: '',
       email   : '',
       password: '',
+      encode: '',
     };
     this.onSignUp = this.onSignUp.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
+
+  componentDidMount() {
+   this._isMounted = true;
+ }
+
+  handleChange(event, name) {
+    this.setState(() => ({ [name]: event.nativeEvent.text }));
+  }
+
   saveDetail() {
 
-    this.ref.add({
-      fullname: this.state.fullname,
-      Email: this.state.email,
-      password: this.state.password,
-    }).then((docRef) => {
-      this.setState({
-        fullName: '',
-        email   : '',
-        password: '',
-      });
-
-    })
+      this.ref.add({
+         Fullname: this.state.fullname,
+         Email: this.state.email,
+         Password: this.state.encode,
+             }).then((docRef) => {
+                    })
     .catch((error) => {
-      console.error("Error adding document: ", error);
-      this.setState({
-        fullName: '',
-        email   : '',
-        password: '',
-      });
-    });
+       console.error("Error adding document: ", error);
+       this.setState({
+          fullName: '',
+          email   : '',
+          password: '',
+         });
+       });
   }
+
+encryp(plainText){
+  var _secretKey = "some-unique-key";
+  var simpleCrypto = new SimpleCrypto(_secretKey);
+  var chiperText = simpleCrypto.encrypt(plainText);
+  return (chiperText);
+
+}
+
+
+
   onClickListener = (viewId) => {
     Alert.alert("Alert", "Button pressed "+viewId);
   }
 
   onSignUp = ()=>{
+
+   this.state.encode=this.encryp(this.state.password);
    this.saveDetail();
-    this.props.navigation.navigate('App');
+   Alert.alert("signup success");
+    this.props.navigation.navigate('LoginPage');
   }
 
   render() {
@@ -89,6 +85,7 @@ export default class SignUpView extends Component {
               placeholder="Full name"
               keyboardType="email-address"
               underlineColorAndroid='transparent'
+              //onchange={(evt) => this.handleChange(evt, "fullname")}
               onChangeText={(fullName) => this.setState({fullName:fullName})}/>
         </View>
 
